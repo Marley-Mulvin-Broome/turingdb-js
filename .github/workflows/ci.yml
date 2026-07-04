@@ -31,17 +31,21 @@ jobs:
       - run: npm ci
       - name: Start TuringDB
         run: |
-          docker run -d --name turingdb -p 6670:6666 \
-            --entrypoint /opt/turingdb-venv/bin/turingdb \
-            turingdbai/turingdb:latest \
-            start -i 0.0.0.0 -p 6666 -demon -turing-dir /home/ubuntu/.turing || true
+          docker run -d -i --name turingdb -p 6670:6666 \
+            turingdbai/turingdb:latest || true
       - name: Wait for TuringDB
         run: |
           for i in $(seq 1 30); do
-            curl -sf -X POST -H 'Accept: application/json' http://localhost:6670/list_avail_graphs && exit 0
-            sleep 2
+            if curl -sf -X POST -H 'Accept: application/json' http://localhost:6670/list_avail_graphs; then
+              exit 0
+            fi
+            printf "."
+            sleep 4
           done
-          echo "TuringDB did not start" && exit 1
+          echo ""
+          echo "TuringDB did not start. Logs:"
+          docker logs turingdb
+          exit 1
       - run: npm run test
         env:
           TURINGDB_HOST: http://localhost:6670
