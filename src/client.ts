@@ -1,7 +1,7 @@
 import { TuringDBException } from "./exceptions";
 import { HTTPClient } from "./http/HTTPClient";
 import type { TuringDBClient } from "./interface";
-import type { ClientConfig, Row } from "./types";
+import type { ClientConfig, Row, Thenable } from "./types";
 
 export type BackendType = "json" | "native" | "embedded";
 
@@ -11,7 +11,7 @@ export interface TuringDBConfig extends ClientConfig {
   dataDir?: string;
 }
 
-export class TuringDB implements TuringDBClient {
+export class TuringDB implements TuringDBClient, Thenable<Row[]> {
   private readonly _impl: TuringDBClient;
 
   constructor(config: TuringDBConfig = {}) {
@@ -139,13 +139,9 @@ export class TuringDB implements TuringDBClient {
     onfulfilled?: ((value: Row[]) => TResult1 | PromiseLike<TResult1>) | null,
     onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
   ): Promise<TResult1 | TResult2> {
-    return (
-      this._impl as unknown as {
-        then(
-          onfulfilled?: ((value: Row[]) => unknown) | null,
-          onrejected?: ((reason: unknown) => unknown) | null,
-        ): Promise<unknown>;
-      }
-    ).then(onfulfilled, onrejected) as Promise<TResult1 | TResult2>;
+    return (this._impl as unknown as Thenable<Row[]>).then(
+      onfulfilled,
+      onrejected,
+    ) as Promise<TResult1 | TResult2>;
   }
 }

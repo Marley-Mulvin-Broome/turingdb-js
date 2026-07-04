@@ -1,12 +1,18 @@
 import { Chain, type Op } from "../chain";
 import { TuringDBException } from "../exceptions";
-import type { ChangeInfo, ClientConfig, RawResponse, Row } from "../types";
+import type {
+  ChangeInfo,
+  ClientConfig,
+  RawResponse,
+  Row,
+  Thenable,
+} from "../types";
 import { parseChunks } from "./parseChunks";
 import { sendRequest } from "./request";
 
 const DEFAULT_HOST = "http://localhost:6666";
 
-export class HTTPClient {
+export class HTTPClient implements Thenable<Row[]> {
   readonly host: string;
   private readonly _bigIntColumns: boolean;
   private readonly _headers: Record<string, string>;

@@ -3,4 +3,10 @@ export { TuringDB } from "./client";
 export { TuringDBException } from "./exceptions";
 export { HTTPClient } from "./http/HTTPClient";
 export type { TuringDBClient } from "./interface";
-export type { ChangeInfo, ClientConfig, RawResponse, Row } from "./types";
+export type {
+  ChangeInfo,
+  ClientConfig,
+  RawResponse,
+  Row,
+  Thenable,
+} from "./types";

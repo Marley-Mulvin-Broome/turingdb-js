@@ -14,3 +14,14 @@ export function randomGraphName(prefix = "test"): string {
   }
   return `${prefix}${suffix}`;
 }
+
+export function colKey(
+  rows: Record<string, unknown>[],
+  suffix: string,
+): string {
+  const key = Object.keys(rows[0]).find((k) => k.endsWith(suffix));
+  if (key === undefined) {
+    throw new Error(`No column ending with "${suffix}" found`);
+  }
+  return key;
+}

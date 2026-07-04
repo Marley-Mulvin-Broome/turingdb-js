@@ -30,3 +30,15 @@ export interface ClientConfig {
   token?: string;
   bigIntColumns?: boolean;
 }
+
+/**
+ * A generic thenable — an object with a `then` method that makes it
+ * compatible with `await`.  `TValue` is the resolved type (defaults
+ * to `Row[]`).
+ */
+export interface Thenable<TValue = Row[]> {
+  then<TResult1 = TValue, TResult2 = never>(
+    onfulfilled?: ((value: TValue) => TResult1 | PromiseLike<TResult1>) | null,
+    onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
+  ): Promise<TResult1 | TResult2>;
+}
