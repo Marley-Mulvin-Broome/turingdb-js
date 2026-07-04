@@ -1,0 +1,49 @@
+{
+  "name": "turingdb-js",
+  "version": "0.1.0",
+  "description": "TuringDB client SDK for JavaScript/TypeScript",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check",
+    "format": "biome check --write",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.config.ts",
+    "docker:up": "docker compose -f docker-compose.yml up -d --wait",
+    "docker:down": "docker compose -f docker-compose.yml down",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.2",
+    "@types/node": "^20.14.0",
+    "@vitest/coverage-v8": "2.1.9",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "turingdb",
+    "graph-database",
+    "cypher",
+    "client"
+  ]
+}

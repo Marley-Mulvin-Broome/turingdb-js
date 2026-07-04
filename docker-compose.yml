@@ -1,0 +1,20 @@
+services:
+  turingdb:
+    image: turingdbai/turingdb:latest
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      [
+        "/opt/turingdb-venv/bin/turingdb start -i 0.0.0.0 -p 6666 -demon -turing-dir /home/ubuntu/.turing -start-timeout 10000 && tail -f /dev/null",
+      ]
+    ports:
+      - "6670:6666"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -sf -X POST -H 'Accept: application/json' -H 'Content-Type: application/json' http://localhost:6666/list_avail_graphs || exit 1",
+        ]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
