@@ -22,6 +22,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: lint
+    services:
+      turingdb:
+        image: turingdbai/turingdb:latest
+        ports:
+          - 6670:6666
+        options: --interactive
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,12 +35,6 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - name: Start TuringDB
-        run: |
-          docker run -d --name turingdb -p 6670:6666 \
-            --entrypoint /opt/turingdb-venv/bin/turingdb \
-            turingdbai/turingdb:latest \
-            start -i 0.0.0.0 -p 6666 -demon -turing-dir /home/ubuntu/.turing
       - name: Wait for TuringDB
         run: |
           for i in $(seq 1 30); do
